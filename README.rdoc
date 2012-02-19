@@ -1,0 +1,17 @@
+= This is SquareGraph.
+
+-n a graph is an abstract representation of a set of objects where some pairs of objects are connected by links. A square of these means that it's a graph where the maximum number of edges adjoining any object is 4.
+
+This tool is an easier way of working with 2d arrays
+
+== How to Install
+
+== Authors
+
+Austin.L **~D4L**
+
+<br />
+<br />
+
+---
+<span style="font-size:5px">noli umquam oblivisci: cogito ergo sum.</span>
