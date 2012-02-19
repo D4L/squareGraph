@@ -8,10 +8,10 @@ This tool is an easier way of working with 2d arrays
 
 == Authors
 
-Austin.L *~D4L*
+Austin.L <b>~D4L</b>
 
-<br>
-<br>
+:br:
+:br:
 
 ---
 noli umquam oblivisci: cogito ergo sum
