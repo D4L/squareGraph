@@ -10,8 +10,8 @@ This tool is an easier way of working with 2d arrays
 
 Austin.L <b>~D4L</b>
 
-:br:
-:br:
+\n
+\n
 
 ---
 noli umquam oblivisci: cogito ergo sum
