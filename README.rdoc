@@ -6,6 +6,8 @@ This tool is an easier way of working with 2d arrays
 
 == How to Install
 
+  gem install squareGraph
+
 == Authors
 
 Austin.L <b>~D4L</b>
