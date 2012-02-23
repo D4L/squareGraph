@@ -6,6 +6,6 @@ Gem::Specification.new do |s|
   s.description = 'No description for now.'
   s.authors = ['Austin Lee ~D4L']
   s.email = 'Austin.L.D4L@gmail.com'
-  s.files = ["lib/squareGraph.rb"]
+  s.files = ["lib/squareGraph.rb", "Rakefile", "spec/squareGraph_spec.rb"]
   s.homepage = 'https://github.com/D4L/squareGraph'
 end
