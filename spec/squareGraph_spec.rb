@@ -18,15 +18,33 @@ describe SquareGraph, '#new' do
   it "should only save integers into the parameters" do
     expect {SquareGraph.new("lalaland", "luftland")}.to raise_error(ArgumentError)
   end
-  it "should be able to resize if there are no conflicts" do
-    #TODO once we create instances, we'll do this later
-  end
-  it "should not be able to resize if conflicts" do
-    #TODO yeah, let's implement this later
+  it "should only save positive integers into the parameters" do
+    expect {SquareGraph.new(0,5)}.to raise_error(ArgumentError)
+    expect {SquareGraph.new(5,-1)}.to raise_error(ArgumentError)
   end
   it "should not save len/wid if no parameters are given" do
     sg = SquareGraph.new
     expect {sq.length}.to raise_error
     expect {sq.width}.to raise_error
+  end
+end
+
+describe SquareGraph, "#resize" do
+  it "resizes dimentioned graphs given two parameters" do
+    sg = SquareGraph.new(5,5)
+    sg.resize(10,10)
+    sg.length.should eq(10)
+    sg.width.should eq(10)
+  end
+  it "should not resize dimentionless graphs" do
+    sg = SquareGraph.new
+    expect {sg.resize(1,1)}.to raise_error(NoMethodError)
+  end
+  it "should only resize to valid sizes" do
+    sg = SquareGraph.new(5,5)
+    expect {sg.resize(0, -1)}.to raise_error(ArgumentError)
+  end
+  it "should not be able to resize if conflicts" do
+    #TODO yeah, let's implement this later
   end
 end
