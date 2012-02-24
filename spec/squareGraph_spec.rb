@@ -48,3 +48,18 @@ describe SquareGraph, "#resize" do
     #TODO yeah, let's implement this later
   end
 end
+
+describe SquareGraph, "#fill" do
+  it "simply fills in a location with a simple TrueClass" do
+    sg = SquareGraph.new(5,5)
+    sg.fill(2,2)
+    sg.get(2,2).should eql(true)
+  end
+end
+
+describe SquareGraph, "#insert" do
+  it "fills a location with an object" do
+    #TODO this one gets rly hard.
+  end
+end
+
