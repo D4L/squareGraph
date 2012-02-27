@@ -10,7 +10,7 @@ This tool is an easier way of working with 2d arrays
 
 == License
 
-Released under the MIT License. See the link:/D4L/squareGraph/blob/master/LICENSE file for further details.
+Released under the MIT License. See the {LICENSE}[link:/D4L/squareGraph/blob/master/LICENSE] file for further details.
 
 == Authors
 
