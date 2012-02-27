@@ -144,3 +144,13 @@ describe SquareGraph, "#empty?" do
     sg.empty?.should eql(false)
   end
 end
+
+describe SquareGraph, "#each" do
+  it "goes through each filled position and allows us to do stuff with them" do
+    sg = SquareGraph.new(4,4)
+    sg.fill(2,2)
+    sg.fill(1,1)
+    sg.fill(1,2)
+    sg.each {|f| @sg.delete(f.x, f.y)}
+  end
+end

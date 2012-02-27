@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.authors = ['Austin Lee ~D4L']
   s.email = 'Austin.L.D4L@gmail.com'
   s.homepage = 'https://github.com/D4L/squareGraph'
+  s.license = 'MIT'
 
   s.files = ["lib/square_graph.rb",
     "lib/face.rb",
