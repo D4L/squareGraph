@@ -84,6 +84,11 @@ describe SquareGraph, "#fill, #get" do
     sg.get(2,2).should be_nil
     sg.get(10,10).should be_nil
   end
+  it "return nil when filling a position that's already filled" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(0,0).should be_nil
+  end
 end
 
 describe SquareGraph, "#insert" do
@@ -145,12 +150,21 @@ describe SquareGraph, "#empty?" do
   end
 end
 
-describe SquareGraph, "#each" do
-  it "goes through each filled position and allows us to do stuff with them" do
-    sg = SquareGraph.new(4,4)
-    sg.fill(2,2)
-    sg.fill(1,1)
-    sg.fill(1,2)
-    sg.each {|f| @sg.delete(f.x, f.y)}
+describe SquareGraph, "#each_pos" do
+  it "returns a each loop where the value is a 2 value'd array containing x,y" do
+    i = 0
+    sg = SquareGraph.new
+    sg.each_pos do |p|
+      i += 1 if sg.get(p[0], p[1])
+    end
+    i.should eql(1)
+  end
+end
+
+describe SquareGraph, "#each_obj" do
+  it "returns an each loop where the value is every object in the graph" do
+    sg = SquareGraph.new
+    sg.each_obj do |o|
+    end
   end
 end

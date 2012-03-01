@@ -6,7 +6,15 @@ This tool is an easier way of working with 2d arrays
 
 == How to Install
 
-  gem install squareGraph
+You can download directly from rubygems.org with the simple command (and it'll install too!):
+
+  $ gem install square_graph
+
+Or you can compile the project yourself (options to install inside rake):
+
+  $ git clone git@github.com:D4L/squareGraph.git
+  ... blah blah pull stuff ...
+  $ rake build_gem
 
 == License
 
@@ -16,7 +24,6 @@ Released under the MIT License. See the {LICENSE}[link:/D4L/squareGraph/blob/mas
 
 Austin.L <b>~D4L</b>
 
-  
-  
+<br>
 ---
 noli umquam oblivisci: cogito ergo sum
