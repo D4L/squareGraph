@@ -1,5 +1,12 @@
 require 'square_graph'
 
+class DummyObject
+  attr_accessor :value
+  def initialize (value)
+    @value = value
+  end
+end
+
 describe SquareGraph, '#new' do
   it "should accept two parameters" do
     SquareGraph.new(5,5).should_not be_nil
@@ -56,6 +63,9 @@ describe SquareGraph, "#fill, #get" do
     sg = SquareGraph.new(5,5)
     sg.fill(2,2)
     sg.get(2,2).should eql(true)
+  end
+  it "can also fill a single position with an object by specifying a third parameter" do
+    du = DummyObject.new
   end
   it "doesn't allow fills of outside the graph" do
     sg = SquareGraph.new(5,10)
@@ -154,8 +164,9 @@ describe SquareGraph, "#each_pos" do
   it "returns a each loop where the value is a 2 value'd array containing x,y" do
     i = 0
     sg = SquareGraph.new
+    sg.fill(0,0)
     sg.each_pos do |p|
-      i += 1 if sg.get(p[0], p[1])
+      i += 1 if sg.get(p.x, p.y)
     end
     i.should eql(1)
   end
@@ -166,5 +177,23 @@ describe SquareGraph, "#each_obj" do
     sg = SquareGraph.new
     sg.each_obj do |o|
     end
+  end
+end
+
+describe SquareGraph, "#[][]" do
+  it "does the same thing get does" do
+    #TODO do this stuff later patches this is epics
+    #sg = SquareGraph.new
+    #sg.fill(0,0)
+    #sg[0][0].should eql(true)
+  end
+end
+
+describe SquareGraph, "#[][]=" do
+  it "does the same thing fill does" do
+    #TODO dothis stuff later, if you need reminder, need row and column classes
+    #sg = SquareGraph.new
+    #sg[0][0] = true
+    #sg[0][0].should eql(true)
   end
 end

@@ -18,12 +18,12 @@ Or you can compile the project yourself (options to install inside rake):
 
 == License
 
-Released under the MIT License. See the {LICENSE}[link:/D4L/squareGraph/blob/master/LICENSE] file for further details.
+Released under the MIT License. See the {LICENSE}[https://github.com/D4L/squareGraph/blob/master/LICENSE] file for further details.
 
 == Authors
 
 Austin.L <b>~D4L</b>
 
-<br>
+
 ---
 noli umquam oblivisci: cogito ergo sum
