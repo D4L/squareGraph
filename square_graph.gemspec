@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'square_graph'
-  s.version = '0.2.0'
+  s.version = '0.3.0'
   s.date = '2012-02-26'
 
   s.summary = 'a better 2d array'

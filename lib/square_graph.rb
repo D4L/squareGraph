@@ -27,13 +27,13 @@ class SquareGraph
     @length, @width = length, width
   end
 
-  def fill(*args)
-    x, y = args[0], args[1]
+  def fill(x, y, o = true)
     test_fixnum(x, y)
     if @sized == true
       return nil if test_range([1, x], [1, y], [x, @length], [y, @length])
     end
-    @sg[[x,y]] = Face.new(x, y, true)
+    return nil if @sg[[x,y]]
+    @sg[[x,y]] = Face.new(x, y, o)
   end
 
   def get(x, y)
@@ -55,6 +55,27 @@ class SquareGraph
     !(@sg.any? do |f|
       @sg[f[0]] and @sg[f[0]].object
     end)
+  end
+
+  def each_obj
+    @sg.each_pair do |f, o|
+      yield(o.object)
+    end
+  end
+
+  def each_pos
+    pos = Array.new
+    @length.downto(1).each do |l|
+      @width.downto(1).each do |w|
+        p = Hash.new
+        p[:x] = l
+        p[:y] = w
+        pos.push(p)
+      end
+    end
+    pos.each do |p|
+      yield(p)
+    end
   end
 
   private

@@ -65,7 +65,10 @@ describe SquareGraph, "#fill, #get" do
     sg.get(2,2).should eql(true)
   end
   it "can also fill a single position with an object by specifying a third parameter" do
-    du = DummyObject.new
+    du = DummyObject.new (3)
+    sg = SquareGraph.new(5,5)
+    sg.fill(3,3,du)
+    sg.get(3,3).should eql(du)
   end
   it "doesn't allow fills of outside the graph" do
     sg = SquareGraph.new(5,10)
@@ -163,10 +166,10 @@ end
 describe SquareGraph, "#each_pos" do
   it "returns a each loop where the value is a 2 value'd array containing x,y" do
     i = 0
-    sg = SquareGraph.new
-    sg.fill(0,0)
+    sg = SquareGraph.new(5,5)
+    sg.fill(3,3)
     sg.each_pos do |p|
-      i += 1 if sg.get(p.x, p.y)
+      i += 1 if sg.get(p[:x], p[:y])
     end
     i.should eql(1)
   end
@@ -175,8 +178,21 @@ end
 describe SquareGraph, "#each_obj" do
   it "returns an each loop where the value is every object in the graph" do
     sg = SquareGraph.new
+    a = DummyObject.new(1)
+    b = DummyObject.new(2)
+    c = DummyObject.new(3)
+    d = DummyObject.new(4)
+    e = DummyObject.new(5)
+    total = 0
+    sg.fill(0,0,a)
+    sg.fill(0,1,b)
+    sg.fill(0,2,c)
+    sg.fill(0,3,d)
+    sg.fill(0,4,e)
     sg.each_obj do |o|
+      total += o.value
     end
+    total.should eql(15)
   end
 end
 
