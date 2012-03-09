@@ -70,6 +70,24 @@ describe SquareGraph, "#fill, #get" do
     sg.fill(3,3,du)
     sg.get(3,3).should eql(du)
   end
+  it "cannot fill spots with falsey things" do
+    sg = SquareGraph.new
+    sg.fill(0,0, nil).should be_nil
+    sg.objects.should be_nil
+  end
+  it "allows weird fills" do
+    sg = SquareGraph.new
+    du = DummyObject.new(nil)
+    sg.fill(0,0,du)
+    sg.get(0,0).value.should be_nil
+  end
+  it "can fill spots with nil to act as delete" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.objects.size.should eql(1)
+    sg.fill(0,0,nil).should be_nil
+    sg.empty?.should eql(true)
+  end
   it "doesn't allow fills of outside the graph" do
     sg = SquareGraph.new(5,10)
     sg.fill(10, 2).should be_nil
@@ -173,6 +191,11 @@ describe SquareGraph, "#each_pos" do
     end
     i.should eql(1)
   end
+  it "returns a enumerator class if run my itself" do
+    sg = SquareGraph.new(5,5)
+    sg.fill(3,3)
+    sg.each_pos.class.should eql(Enumerator)
+  end
 end
 
 describe SquareGraph, "#each_obj" do
@@ -194,6 +217,11 @@ describe SquareGraph, "#each_obj" do
     end
     total.should eql(15)
   end
+  it "returns an enumerator class if run my itself" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.each_obj.class.should eql(Enumerator)
+  end
 end
 
 describe SquareGraph, "#[][]" do
@@ -211,5 +239,27 @@ describe SquareGraph, "#[][]=" do
     #sg = SquareGraph.new
     #sg[0][0] = true
     #sg[0][0].should eql(true)
+  end
+end
+
+describe SquareGraph, "#objects" do
+  it "returns an array of all the objects" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(2,2)
+    sg.fill(3,3)
+    sg.objects.each do |i|
+      i.should eql(true)
+    end
+  end
+  it "returns nil if there aren't any objects" do
+    sg = SquareGraph.new
+    sg.objects.should be_nil
+  end
+end
+
+describe SquareGraph, "#anytrue?" do
+  it "requires some more truthy stuff" do
+    #TODO kekeke
   end
 end

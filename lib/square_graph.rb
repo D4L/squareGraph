@@ -29,6 +29,10 @@ class SquareGraph
 
   def fill(x, y, o = true)
     test_fixnum(x, y)
+    if not o
+      self.remove(x, y) if @sg[[x, y]]
+      return nil
+    end
     if @sized == true
       return nil if test_range([1, x], [1, y], [x, @length], [y, @length])
     end
@@ -52,18 +56,25 @@ class SquareGraph
   end
 
   def empty?
+    @sg.none?
+  end
+
+  def anytrue?
     !(@sg.any? do |f|
       @sg[f[0]] and @sg[f[0]].object
     end)
   end
 
   def each_obj
+    return nil if @sg.empty?
     @sg.each_pair do |f, o|
       yield(o.object)
-    end
+    end if block_given?
+    @sg.each_pair if not block_given?
   end
 
   def each_pos
+    return nil if @sg.empty?
     pos = Array.new
     @length.downto(1).each do |l|
       @width.downto(1).each do |w|
@@ -75,7 +86,17 @@ class SquareGraph
     end
     pos.each do |p|
       yield(p)
+    end if block_given?
+    pos.each if not block_given?
+  end
+
+  def objects
+    rt = Array.new
+    @sg.values.each do |f|
+      rt.push (f.object)
     end
+    return nil if rt.size == 0
+    rt
   end
 
   private
