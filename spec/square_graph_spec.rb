@@ -263,3 +263,4 @@ describe SquareGraph, "#anytrue?" do
     #TODO kekeke
   end
 end
+

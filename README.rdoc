@@ -16,6 +16,21 @@ Or you can compile the project yourself (options to install inside rake):
   ... blah blah pull stuff ...
   $ rake build_gem
 
+== How to Use
+
+Yay, you have the gem now! Now you can include this in your projects.
+
+Initiate a SquareGraph:
+
+  sgWithoutDimensions = SquareGraph.new
+  sgWithDimensions = SquareGraph.new(x, y)
+
+Fill in faces!
+
+  SquareGraph.fill(0,0,my_sexy_object)
+
+Have fun!
+
 == License
 
 Released under the MIT License. See the {LICENSE}[https://github.com/D4L/squareGraph/blob/master/LICENSE] file for further details.

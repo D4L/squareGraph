@@ -1,5 +1,3 @@
-require 'face'
-
 class SquareGraph
 
   attr_reader :length, :width
@@ -112,3 +110,5 @@ class SquareGraph
   end
 
 end
+
+require 'square_graph/face'
