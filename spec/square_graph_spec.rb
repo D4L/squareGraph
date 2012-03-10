@@ -258,9 +258,106 @@ describe SquareGraph, "#objects" do
   end
 end
 
-describe SquareGraph, "#anytrue?" do
-  it "requires some more truthy stuff" do
-    #TODO kekeke
+describe SquareGraph, "#truthy?" do
+  it "checks if any of the objects result in truthy" do
+    sg = SquareGraph.new
+    sg.truthy?.should eql(false)
+    sg.fill(0,0)
+    sg.truthy?.should eql(true)
+  end
+  it "allows users to pass a block that it can compare with" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    sg.fill(0,0, du)
+    sg.truthy?{do |f| f.object.value == 0}.should eql(true)
+    sg.truthy?{do |f| f.object.value == 1}.should eql(false)
   end
 end
 
+describe SquareGraph, "#falsey?" do
+  it "checks if any of the objects results in falsey" do
+    sg = SquareGraph.new
+    sg.falsey?.should eql(false)
+    sg.fill(0,0)
+    sg.falsey?.should eql(false)
+  end
+end
+describe SquareGraph, "#truthy" do
+  it "returns a SquareGraph that contains only the truthy elements" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    tsg = sg.truthy
+    sg.should eql(tsg)
+  end
+  it "returns nil if there aren't any truthy objects" do
+    sg = SquareGraph.new
+    sg.truthy?.should eql(false)
+    sg.truthy.should be_nil
+  end
+end
+
+describe SquareGraph, "#need_truthy" do
+  it "provides an array of all the classes in the squareGraph that need a truthy method" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    sg.fill(0,0, du)
+    sg.need_truthy.include?(DummyObject).should eql(true)
+  end
+end
+
+describe SquareGraph, ".create_truthy" do
+  it "helps define truthy methods for classes" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    SquareGraph.create_truthy(DummyObject) do |d|
+      d.value == 0
+    end
+    du.truthy?.should eql(true)
+  end
+  it "will nil if truthy is already defined" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    SquareGraph.create_truthy(DummyObject) do |d|
+      d.value == 1
+    end
+    du.truthy?.should eql(false)
+    SquareGraph.create_truthy(DummyObject) do |d|
+      d.value == 0
+    end.should be_nil
+    du.truthy?.should eql(false)
+  end
+end
+
+describe SquareGraph, ".create_truthy!" do
+  it "does the same as .create_truthy" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    SquareGraph.create_truthy!(DummyObject) do |d|
+      d.value == 0
+    end
+    du.truthy?.should eql(true)
+  end
+  it "overwrite truthy methods!" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    SquareGraph.create_truthy(DummyObject) do |d|
+      d.value == 1
+    end
+    du.truthy?.should eql(false)
+    SquareGraph.create_truthy!(DummyObject) do |d|
+      d.value == 0
+    end.should_not be_nil
+    du.truthy?should eql(true)
+  end
+end
+
+describe SquareGraph, "#each" do
+  it "returns an iterator of faces." do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(1,1)
+    sg.each do |f|
+      f.truthy?.should eql(true)
+    end
+  end
+end
