@@ -63,6 +63,13 @@ class SquareGraph
     end)
   end
 
+  def each
+    return nil if @sg.empty?
+    @sg.each_pair do |p, f|
+      yield(f)
+    end if block_given?
+  end
+
   def each_obj
     return nil if @sg.empty?
     @sg.each_pair do |f, o|
@@ -95,6 +102,38 @@ class SquareGraph
     end
     return nil if rt.size == 0
     rt
+  end
+
+  def truthy
+    if @sized
+      result = SquareGraph.new(@length, @width)
+    else
+      result = SquareGraph.new
+    end
+    @sg.each_pair do  |p, f|
+      result.fill(f.x, f.y, f.object) if f.truthy?
+    end
+    result
+  end
+
+  def need_truthy
+  end
+
+  def self.create_truthy (objClass, &truthyMethod)
+    return nil if objClass.method_defined? :truthy?
+    objClass.send :define_method, :truthy?, truthyMethod
+  end
+
+  def self.create_truthy! (objClass, &truthyMethod)
+    objClass.send :define_method, :truthy? do
+      truthyMethod
+    end
+  end
+
+  def truthy?
+  end
+
+  def falsey?
   end
 
   private

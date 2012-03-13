@@ -7,7 +7,7 @@ class DummyObject
   end
 end
 
-describe SquareGraph::Face, '#new' do
+describe SquareGraph::Face, "#new" do
   it "accepts an x, y, object and can display them easily" do
     f = SquareGraph::Face.new(5, 5, true)
     f.x.should eql(5)
@@ -18,9 +18,10 @@ describe SquareGraph::Face, '#new' do
     du = DummyObject.new(0)
     f = SquareGraph::Face.new(5,5, du)
     f.object.should eql(du)
+  end
 end
 
-describe SquareGraph::Face, '#truthy?' do
+describe SquareGraph::Face, "#truthy?" do
   it "asks an object whether it is true or not" do
     f = SquareGraph::Face.new(5,5, true)
     f.truthy?.should eql(true)
@@ -33,6 +34,6 @@ describe SquareGraph::Face, '#truthy?' do
   it "accepts a block that will override a truthy method or in replace of a truthy method" do
     du = DummyObject.new(0)
     f = SquareGraph::Face.new(5,5, du)
-    f.truthy?{do |o| o.value.equals? 0}.should eql(true)
+    (f.truthy?{|o| o.value == 0}).should eql(true)
   end
 end

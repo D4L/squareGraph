@@ -269,8 +269,8 @@ describe SquareGraph, "#truthy?" do
     sg = SquareGraph.new
     du = DummyObject.new(0)
     sg.fill(0,0, du)
-    sg.truthy?{do |f| f.object.value == 0}.should eql(true)
-    sg.truthy?{do |f| f.object.value == 1}.should eql(false)
+    sg.truthy?{|f| f.object.value == 0}.should eql(true)
+    sg.truthy?{|f| f.object.value == 1}.should eql(false)
   end
 end
 
@@ -287,7 +287,7 @@ describe SquareGraph, "#truthy" do
     sg = SquareGraph.new
     sg.fill(0,0)
     tsg = sg.truthy
-    sg.should eql(tsg)
+    sg.should eq(tsg)
   end
   it "returns nil if there aren't any truthy objects" do
     sg = SquareGraph.new
@@ -309,20 +309,20 @@ describe SquareGraph, ".create_truthy" do
   it "helps define truthy methods for classes" do
     sg = SquareGraph.new
     du = DummyObject.new(0)
-    SquareGraph.create_truthy(DummyObject) do |d|
-      d.value == 0
+    SquareGraph.create_truthy(DummyObject) do
+      value == 0
     end
     du.truthy?.should eql(true)
   end
   it "will nil if truthy is already defined" do
     sg = SquareGraph.new
     du = DummyObject.new(0)
-    SquareGraph.create_truthy(DummyObject) do |d|
-      d.value == 1
+    SquareGraph.create_truthy(DummyObject) do
+      value == 1
     end
     du.truthy?.should eql(false)
-    SquareGraph.create_truthy(DummyObject) do |d|
-      d.value == 0
+    SquareGraph.create_truthy(DummyObject) do
+      value == 0
     end.should be_nil
     du.truthy?.should eql(false)
   end
@@ -347,7 +347,7 @@ describe SquareGraph, ".create_truthy!" do
     SquareGraph.create_truthy!(DummyObject) do |d|
       d.value == 0
     end.should_not be_nil
-    du.truthy?should eql(true)
+    du.truthy?.should eql(true)
   end
 end
 

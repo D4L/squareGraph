@@ -5,4 +5,11 @@ class SquareGraph::Face
     @y = y
     @object = object
   end
+
+  def truthy?(&alt)
+    if alt
+      return alt.call(object)
+    end
+    (object == true) || (object.truthy? if object.respond_to? :truthy?)
+  end
 end
