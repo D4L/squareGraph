@@ -22,6 +22,7 @@ describe SquareGraph::Face, "#new" do
 end
 
 describe SquareGraph::Face, "#truthy?" do
+  before(:each) {DummyObject.send(:remove_method, :truthy?) if DummyObject.method_defined? :truthy?}
   it "asks an object whether it is true or not" do
     f = SquareGraph::Face.new(5,5, true)
     f.truthy?.should eql(true)
