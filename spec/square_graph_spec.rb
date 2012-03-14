@@ -62,7 +62,7 @@ describe SquareGraph, "#fill, #get" do
   it "fills a single position with a TrueClass and gets it back with get" do
     sg = SquareGraph.new(5,5)
     sg.fill(2,2)
-    sg.get(2,2).should eql(true)
+    sg.get(2,2).should be_true
   end
   it "can also fill a single position with an object by specifying a third parameter" do
     du = DummyObject.new (3)
@@ -86,7 +86,7 @@ describe SquareGraph, "#fill, #get" do
     sg.fill(0,0)
     sg.objects.size.should eql(1)
     sg.fill(0,0,nil).should be_nil
-    sg.empty?.should eql(true)
+    sg.empty?.should be_true
   end
   it "doesn't allow fills of outside the graph" do
     sg = SquareGraph.new(5,10)
@@ -104,7 +104,7 @@ describe SquareGraph, "#fill, #get" do
     sg = SquareGraph.new
     sg.fill(2,2)
     sg.fill(-1, -3)
-    sg.get(-1, -3).should eql(true)
+    sg.get(-1, -3).should be_true
   end
   it "nils if getting something that doesn't exist yet" do
     sg = SquareGraph.new
@@ -132,7 +132,7 @@ describe SquareGraph, "#remove" do
   it "removes any objects from a certain position" do
     sg = SquareGraph.new
     sg.fill(2,2)
-    sg.get(2,2).should eql(true)
+    sg.get(2,2).should be_true
     sg.remove(2,2)
     sg.get(2,2).should be_nil
   end
@@ -150,7 +150,7 @@ describe SquareGraph, "#clear" do
   it "removes every object in the graph" do
     sg = SquareGraph.new
     (0..5).each {|x| sg.fill(x, x)}
-    (1..6).each {|x| sg.get(x-1, x-1).should eql(true)}
+    (1..6).each {|x| sg.get(x-1, x-1).should be_true}
     sg.clear
     (2..7).each {|x| sg.get(x-2, x-2).should be_nil}
   end
@@ -164,15 +164,15 @@ describe SquareGraph, "#empty?" do
         sg.fill(x,y)
       end
     end
-    sg.get(3, 3).should eql(true)
+    sg.get(3, 3).should be_true
     sg.clear
-    sg.empty?.should eql(true)
+    sg.empty?.should be_true
   end
   it "informs us even if we just remove the items" do
     sg = SquareGraph.new
     sg.fill(0,0)
     sg.remove(0, 0)
-    sg.empty?.should eql(true)
+    sg.empty?.should be_true
   end
   it "returns false if the graph isn't empty" do
     sg = SquareGraph.new
@@ -195,6 +195,27 @@ describe SquareGraph, "#each_pos" do
     sg = SquareGraph.new(5,5)
     sg.fill(3,3)
     sg.each_pos.class.should eql(Enumerator)
+  end
+  it "works for non-dimentioned graphs by using the max/min points" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(2,2)
+    i = 0
+    sg.each_pos do |p|
+      i += 1
+    end
+    i.should eql(9)
+  end
+  it "works if there are negative positions too" do
+    sg = SquareGraph.new
+    sg.fill(-3, -4)
+    sg.fill(1, 4)
+    sg.fill(-1, 8)
+    i = 0
+    sg.each_pos do |p|
+      i += 1
+    end
+    i.should eql(65)
   end
 end
 
@@ -229,7 +250,7 @@ describe SquareGraph, "#[][]" do
     #TODO do this stuff later patches this is epics
     #sg = SquareGraph.new
     #sg.fill(0,0)
-    #sg[0][0].should eql(true)
+    #sg[0][0].should be_true
   end
 end
 
@@ -238,7 +259,7 @@ describe SquareGraph, "#[][]=" do
     #TODO dothis stuff later, if you need reminder, need row and column classes
     #sg = SquareGraph.new
     #sg[0][0] = true
-    #sg[0][0].should eql(true)
+    #sg[0][0].should be_true
   end
 end
 
@@ -249,7 +270,7 @@ describe SquareGraph, "#objects" do
     sg.fill(2,2)
     sg.fill(3,3)
     sg.objects.each do |i|
-      i.should eql(true)
+      i.should be_true
     end
   end
   it "returns nil if there aren't any objects" do
@@ -258,9 +279,136 @@ describe SquareGraph, "#objects" do
   end
 end
 
-describe SquareGraph, "#anytrue?" do
-  it "requires some more truthy stuff" do
-    #TODO kekeke
+describe SquareGraph, "#truthy?" do
+  it "checks if any of the objects result in truthy" do
+    sg = SquareGraph.new
+    sg.truthy?.should eql(false)
+    sg.fill(0,0)
+    sg.truthy?.should be_true
+  end
+  it "lets users pass a block that will be used as truthy? for each object" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    sg.fill(0,0, du)
+    sg.truthy?{|o| o.value == 0}.should be_true
+    sg.truthy?{|o| o.value == 1}.should eql(false)
   end
 end
 
+describe SquareGraph, "#falsey?" do
+  it "checks if any of the objects results in falsey" do
+    sg = SquareGraph.new
+    sg.falsey?.should eql(false)
+    sg.fill(0,0)
+    sg.falsey?.should eql(false)
+  end
+end
+describe SquareGraph, "#truthy" do
+  it "returns a SquareGraph that contains only the truthy elements" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    tsg = sg.truthy
+    sg.should eq(tsg)
+  end
+  it "returns nil if there aren't any truthy objects" do
+    sg = SquareGraph.new
+    sg.truthy?.should eql(false)
+    sg.truthy.should be_nil
+  end
+end
+
+describe SquareGraph, "#need_truthy" do
+  before(:each) {DummyObject.send(:remove_method, :truthy?) if DummyObject.method_defined? :truthy?}
+  it "provides an array of all the classes in the squareGraph that need a truthy method" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    sg.fill(0,0, du)
+    sg.need_truthy.include?(DummyObject).should be_true
+  end
+  it "returns nil if there all the elements in the squareGraph have a truthy method" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    tehTruthy = Proc.new do
+      p "hello world"
+    end
+    SquareGraph.create_truthy(DummyObject, &tehTruthy)
+    sg.need_truthy.should be_nil
+  end
+end
+
+describe SquareGraph, ".create_truthy" do
+  before(:each) {DummyObject.send(:remove_method, :truthy?) if DummyObject.method_defined? :truthy?}
+  it "helps define truthy methods for classes" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    SquareGraph.create_truthy(DummyObject) do
+      value == 0
+    end
+    du.truthy?.should be_true
+  end
+  it "will nil if truthy is already defined" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    SquareGraph.create_truthy(DummyObject) do
+      value == 1
+    end
+    du.truthy?.should eql(false)
+    SquareGraph.create_truthy(DummyObject) do
+      value == 0
+    end.should be_nil
+    du.truthy?.should eql(false)
+  end
+end
+
+describe SquareGraph, ".create_truthy!" do
+  before(:each) {DummyObject.send(:remove_method, :truthy?) if DummyObject.method_defined? :truthy?}
+  it "does the same as .create_truthy" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    SquareGraph.create_truthy!(DummyObject) do
+      value == 0
+    end
+    du.truthy?.should be_true
+  end
+  it "overwrite truthy methods!" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    SquareGraph.create_truthy(DummyObject) do
+      value == 1
+    end
+    du.truthy?.should eql(false)
+    SquareGraph.create_truthy!(DummyObject) do
+      value == 0
+    end.should_not be_nil
+    du.truthy?.should be_true
+  end
+end
+
+describe SquareGraph, "#each" do
+  it "returns an iterator of faces." do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(1,1)
+    sg.each do |f|
+      f.truthy?.should be_true
+    end
+  end
+end
+
+describe SquareGraph, "#==" do
+  it "compares two squaregraphs without identites" do
+    sg1 = SquareGraph.new
+    sg2 = SquareGraph.new
+    (sg1 == sg2).should be_true
+    sg1.should == sg2
+  end
+  it "compares objects without identies too" do
+    du = DummyObject.new(5)
+    sg1 = SquareGraph.new
+    sg2 = SquareGraph.new
+    sg1.fill(0,0,du)
+    sg2.fill(0,0,du)
+    (sg1 == sg2).should be_true
+    sg1.should == sg2
+  end
+end

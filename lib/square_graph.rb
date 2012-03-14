@@ -63,6 +63,13 @@ class SquareGraph
     end)
   end
 
+  def each
+    return nil if @sg.empty?
+    @sg.each_pair do |p, f|
+      yield(f)
+    end if block_given?
+  end
+
   def each_obj
     return nil if @sg.empty?
     @sg.each_pair do |f, o|
@@ -74,8 +81,8 @@ class SquareGraph
   def each_pos
     return nil if @sg.empty?
     pos = Array.new
-    @length.downto(1).each do |l|
-      @width.downto(1).each do |w|
+    (@length||@sg.keys.max(&comp('x'))[0]).downto(@sized?1:@sg.keys.min(&comp('x'))[0]).each do |l|
+      (@width||@sg.keys.max(&comp('y'))[1]).downto(@sized?1:@sg.keys.min(&comp('y'))[1]).each do |w|
         p = Hash.new
         p[:x] = l
         p[:y] = w
@@ -97,6 +104,57 @@ class SquareGraph
     rt
   end
 
+  def truthy
+    if @sized
+      result = SquareGraph.new(@length, @width)
+    else
+      result = SquareGraph.new
+    end
+    @sg.each_pair do  |p, f|
+      result.fill(f.x, f.y, f.object) if f.truthy?
+    end
+    return nil if result.objects.nil?
+    result
+  end
+
+  def need_truthy
+    result = Array.new
+    @sg.each_pair do |p, f|
+      result.push(f.object.class) if not f.object.class.method_defined? :truthy?
+    end
+    return nil if result.empty?
+    result
+  end
+
+  def self.create_truthy (objClass, &truthyMethod)
+    return nil if objClass.method_defined? :truthy?
+    objClass.send :define_method, :truthy?, truthyMethod
+  end
+
+  def self.create_truthy! (objClass, &truthyMethod)
+    objClass.send :define_method, :truthy?, truthyMethod
+  end
+
+  def truthy? (&alt_cond)
+    return false if @sg.size == 0
+    @sg.each_pair do |p, f|
+      return false if not f.truthy?(&alt_cond)
+    end
+    true
+  end
+
+  def falsey?
+    return false if @sg.size == 0
+    self.truthy.nil?
+  end
+
+  def == sg2
+    sg2.each_pos do |p|
+      return false if self.get(p[:x], p[:y]) != sg2.get(p[:x], p[:y])
+    end
+    true
+  end
+
   private
 
   def test_fixnum(*value)
@@ -107,6 +165,16 @@ class SquareGraph
 
   def test_range(*value)
     value.any? {|pair| pair[0] > pair[1]}
+  end
+
+  def comp(pos)
+    Proc.new do |x,y|
+      if pos == 'x'
+        x[0] <=> y[0]
+      else
+        x[1] <=> y[1]
+      end
+    end
   end
 
 end
