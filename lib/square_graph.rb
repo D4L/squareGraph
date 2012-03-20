@@ -43,6 +43,11 @@ class SquareGraph
     @sg[[x,y]].object
   end
 
+  def get_face(x, y)
+    return nil if !@sg[[x,y]]
+    @sg[[x,y]]
+  end
+
   def remove(*args)
     x, y = args[0], args[1]
     test_fixnum(x, y)
@@ -153,6 +158,17 @@ class SquareGraph
       return false if self.get(p[:x], p[:y]) != sg2.get(p[:x], p[:y])
     end
     true
+  end
+
+  def neighbours (loc)
+    if loc.class == Face
+      loc = Array.new([loc.x, loc.y])
+    end
+    result = Array.new
+    [[1,1],[1,0],[1,-1],[0,-1],[-1,-1],[-1,0],[-1,1],[0,1]].each do |around|
+      result.push @sg[[loc[0] + around[0], loc[1] + around[1]]] if @sg[[loc[0] + around[0], loc[1] + around[1]]]
+    end
+    result
   end
 
   private

@@ -12,4 +12,8 @@ class SquareGraph::Face
     end
     (object == true) || (object.truthy? if object.respond_to? :truthy?)
   end
+
+  def u
+    p self.instance_variables
+  end
 end

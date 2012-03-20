@@ -38,3 +38,15 @@ describe SquareGraph::Face, "#truthy?" do
     (f.truthy?{|o| o.value == 0}).should eql(true)
   end
 end
+
+describe SquareGraph::Face, "#u" do
+  it "looks above the current face on a squareGraph and returns the face above it" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(0,1)
+    f = sg.get_face(0,0)
+    f = f.u
+    f.x.should eql(0)
+    f.y.should eql(1)
+  end
+end

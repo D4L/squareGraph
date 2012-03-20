@@ -122,6 +122,17 @@ describe SquareGraph, "#fill, #get" do
   end
 end
 
+describe SquareGraph, "#get_face" do
+  it "gets the entire face as opposed to just the object" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    f = sg.get_face(0,0)
+    f.x.should eql(0)
+    f.y.should eql(0)
+    f.object.should be_true
+  end
+end
+
 describe SquareGraph, "#insert" do
   it "fills a location with an object" do
     #TODO this one gets rly hard. don't know if we should put it into fill
@@ -410,5 +421,39 @@ describe SquareGraph, "#==" do
     sg2.fill(0,0,du)
     (sg1 == sg2).should be_true
     sg1.should == sg2
+  end
+end
+
+describe SquareGraph, "#neighbours" do
+  it "selects the neighbours of the point specified, and return them in an array of Faces" do
+    sg1 = SquareGraph.new
+    sg1.fill(0,0)
+    sg1.fill(1,1)
+    sg1.fill(-1,1)
+    neighbourz = sg1.neighbours([0,1])
+    neighbourz.class.should eql(Array)
+  end
+  it "selects immediate neighbors in a 1 block radius" do
+    sg1 = SquareGraph.new
+    sg1.fill(0,0)
+    sg1.fill(1,1)
+    sg1.fill(-1,1)
+    sg1.fill(1,2)
+    sg1.fill(4,3)
+    neighbourz = sg1.neighbours([0,1])
+    tru_nei = 0
+    neighbourz.each do |f|
+      tru_nei += 1 if f.truthy?
+    end
+    tru_nei.should eql(4)
+  end
+  it "can accept a face object and return it's neighbours" do
+    sg1 = SquareGraph.new
+    sg1.fill(0,0)
+    sg1.fill(1,1)
+    sg1.fill(0,1)
+    sg1.each do |f|
+      sg1.neighbours(f).size.should eql(2)
+    end
   end
 end
