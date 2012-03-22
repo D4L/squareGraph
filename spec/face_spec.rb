@@ -49,4 +49,12 @@ describe SquareGraph::Face, "#u" do
     f.x.should eql(0)
     f.y.should eql(1)
   end
+  it "returns a face" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(0,1)
+    f = sg.get_face(0,0)
+    f = f.u
+    f.class.should eql(SquareGraph::Face)
+  end
 end

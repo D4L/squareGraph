@@ -34,6 +34,10 @@ describe SquareGraph, '#new' do
     expect {sq.length}.to raise_error
     expect {sq.width}.to raise_error
   end
+  it "returns a squareGraph class object" do
+    sg = SquareGraph.new
+    sg.class.should eql(SquareGraph)
+  end
 end
 
 describe SquareGraph, "#resize" do
@@ -55,6 +59,10 @@ describe SquareGraph, "#resize" do
     sg = SquareGraph.new(5, 5)
     sg.fill(5, 5)
     sg.resize(4, 4).should be_nil
+  end
+  it "returns the newly resized square graph" do
+    sg = SquareGraph.new(5, 5)
+    sg.resize(4, 4).class.should eql(SquareGraph)
   end
 end
 
@@ -120,6 +128,10 @@ describe SquareGraph, "#fill, #get" do
     sg.fill(0,0)
     sg.fill(0,0).should be_nil
   end
+  it "returns the face of the entered space if worked" do
+    sg = SquareGraph.new
+    sg.fill(0,0).class.should eql(SquareGraph::Face)
+  end
 end
 
 describe SquareGraph, "#get_face" do
@@ -131,11 +143,10 @@ describe SquareGraph, "#get_face" do
     f.y.should eql(0)
     f.object.should be_true
   end
-end
-
-describe SquareGraph, "#insert" do
-  it "fills a location with an object" do
-    #TODO this one gets rly hard. don't know if we should put it into fill
+  it "returns a faceclass" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.get_face(0,0).class.should eql(SquareGraph::Face)
   end
 end
 
@@ -154,6 +165,11 @@ describe SquareGraph, "#remove" do
   it "returns nil if you try and remove something outside of rannge" do
     sg = SquareGraph.new(5, 5)
     sg.remove(10, 10).should be_nil
+  end
+  it "returns the faceobject you removed if it works" do
+    sg = SquareGraph.new
+    sg.fill(2,2)
+    sg.remove(2,2).class.should eql(SquareGraph::Face)
   end
 end
 
@@ -288,6 +304,11 @@ describe SquareGraph, "#objects" do
     sg = SquareGraph.new
     sg.objects.should be_nil
   end
+  it "returns an object of class Array" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.objects.class.should eql(Array)
+  end
 end
 
 describe SquareGraph, "#truthy?" do
@@ -326,6 +347,12 @@ describe SquareGraph, "#truthy" do
     sg.truthy?.should eql(false)
     sg.truthy.should be_nil
   end
+  it "returns an object of class SquareGraph" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(1,1)
+    sg.truthy.class.should eql(SquareGraph)
+  end
 end
 
 describe SquareGraph, "#need_truthy" do
@@ -335,6 +362,12 @@ describe SquareGraph, "#need_truthy" do
     du = DummyObject.new(0)
     sg.fill(0,0, du)
     sg.need_truthy.include?(DummyObject).should be_true
+  end
+  it "returns an object of class Array" do
+    sg = SquareGraph.new
+    du = DummyObject.new(0)
+    sg.fill(0,0,du)
+    sg.need_truthy.class.should eql(Array)
   end
   it "returns nil if there all the elements in the squareGraph have a truthy method" do
     sg = SquareGraph.new
@@ -402,6 +435,19 @@ describe SquareGraph, "#each" do
     sg.fill(1,1)
     sg.each do |f|
       f.truthy?.should be_true
+    end
+  end
+  it "returns an enumerator if not passed a block" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.fill(1,1)
+    sg.each.class.should eql(Enumerator)
+  end
+  it "provides each face to mess with" do
+    sg = SquareGraph.new
+    sg.fill(0,0)
+    sg.each do |f|
+      f.class.should eql(SquareGraph::Face)
     end
   end
 end
